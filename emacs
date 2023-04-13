@@ -36,6 +36,19 @@
                     :activation-fn (lsp-activate-on "zeek")
                     :server-id 'zeek)))
 
+;; Setup using bison mode and flex mode
+(require 'flex)
+(add-to-list 'auto-mode-alist '("\\.l$" . flex-mode))
+(autoload 'flex-mode "flex")
+
+(require 'bison-mode)
+(add-to-list 'auto-mode-alist '("\\.y$" . bison-mode))
+(autoload 'bison-mode "bison-mode")
+
+;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
+(setq read-process-output-max (* 1024 1024))
+(setq gc-cons-threshold 1600000)
+
 ;; make yes-no questions just be y-n
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -109,7 +122,7 @@
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
  '(package-selected-packages
-   '(flymake yasnippet vlf yaml-mode use-package lsp-ui cmake-mode dap-mode lsp-mode smart-tab smart-tabs-mode))
+   '(rust-mode bison-mode persp-mode flycheck flymake yasnippet vlf yaml-mode use-package lsp-ui cmake-mode dap-mode lsp-mode smart-tab smart-tabs-mode))
  '(scroll-step 1)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
