@@ -114,7 +114,7 @@
  '(completion-ignored-extensions
    '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl" ".glo" ".idx" ".lot" ".tmp"))
  '(current-language-environment "English")
- '(fill-column 80)
+ '(fill-column 100)
  '(global-auto-revert-mode t)
  '(global-font-lock-mode t)
  '(inhibit-startup-screen t)
