@@ -84,10 +84,11 @@
 (global-set-key [del] 'delete-char)
 
 ; another comment region
-(global-set-key [?\C-c ?c] 'comment-region)
-(global-set-key [?\C-c ?u] 'uncomment-region)
+(global-set-key (kbd "C-c c") 'comment-region)
+(global-set-key (kbd "C-c u") 'uncomment-region)
 
-(global-set-key [?\C-x ?b] 'switch-to-buffer)
+(global-set-key (kbd "C-x b") 'switch-to-buffer)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
