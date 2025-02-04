@@ -1,13 +1,23 @@
 ;; Add custom .el path to load-path
 (add-to-list 'load-path "~/.emacs.d/custom")
+(add-to-list 'load-path "/opt/homebrew/Cellar/clang-format/19.1.4/share/clang")
+(add-to-list 'load-path "~/.local/bin")
 
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+         '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
+
+;; Setup tree-sitter
+(eval-when-compile
+  (require 'treesit))
+  
+;; (use-package treesit-auto
+;;   :config
+;;   (global-treesit-auto-mode))
 
 ;; Setup use-package
 (eval-when-compile
@@ -16,25 +26,54 @@
 (use-package vlf)
 (use-package cmake-mode)
 (use-package lsp-mode
+  :ensure t
   :hook ((c-mode c++-mode) . lsp)
   :config
   (setq lsp-clients-clangd-args '("-j=4" "--background-index" "--log=error" "--compile-commands-dir=build"))
-;  (setq lsp-eldoc-enable-hover nil)
   :commands lsp)
 (use-package lsp-ui
   :commands lsp-ui-mode)
 (use-package yasnippet)
-(use-package zeek-mode)
+(use-package clang-format)
+
+(use-package tiny)
+(tiny-setup-default)
+
+;; Custom major modes for zeek development plus LSP support for zeek-language-server
+(use-package zeek-bif-mode)
+(use-package polymode
+  :ensure t
+  :mode("\.bif$" . poly-bif-mode)
+  :config
+  (define-hostmode poly-bif-hostmode :mode 'zeek-bif-mode)
+  (define-innermode poly-cpp-bif-innermode
+                    :mode 'c++-mode
+                    :head-matcher "^.*%\{"
+                    :tail-matcher "^.*%\}"
+                    :head-mode 'host
+                    :tail-mode 'host)
+  (define-polymode poly-bif-mode
+                   :hostmode 'poly-bif-hostmode
+                   :innermodes '(poly-cpp-bif-innermode)))
 
 (add-hook 'zeek-mode-hook #'lsp)
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-language-id-configuration
-	       '(zeek-mode . "zeek"))
+           '(zeek-mode . "zeek"))
 
   (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection "zeek-language-server")
+;;   (make-lsp-client :new-connection (lsp-stdio-connection '("zeek-language-server" "-f" "debug"))
+   (make-lsp-client :new-connection (lsp-stdio-connection '("zeek-language-server"))
                     :activation-fn (lsp-activate-on "zeek")
                     :server-id 'zeek)))
+
+;; Custom major mode for spicy development
+(use-package spicy-ts-mode)
+(add-to-list 'auto-mode-alist '("\\.spicy$" . spicy-ts-mode))
+(autoload 'spicy-ts-mode "spicy")
+
+;; Zeek BIF mode, used by polymode for simple highlighting
+(use-package zeek-bif-mode)
 
 ;; Setup using bison mode and flex mode
 (require 'flex)
@@ -60,11 +99,15 @@
 (setq default-major-mode 'text-mode)
 
 ; disable a couple of minor modes that I don't care about
-(abbrev-mode -1)
-(eldoc-mode -1)
+(setq-default abbrev-mode nil)
+(setq-default eldoc-mode nil)
 
 ;; set shell mode variables
 (setq shell-prompt-pattern "[A-Za-z]* \[[0-9]*\]% ")
+
+;; Hide any "special" buffers by default
+(require 'ibuf-ext)
+(add-to-list 'ibuffer-never-show-predicates "^\\*")
 
 ;; Keybinds
 (global-set-key [prior]   'scroll-down) ; Page Up
@@ -97,6 +140,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:background "black" :foreground "white"))))
  '(cursor ((t (:background "blue"))))
+ '(font-lock-number-face ((t (:inherit 'font-lock-constant-face))))
  '(highlight ((t (:background "blue"))))
  '(mode-line ((t (:background "blue" :foreground "white" :box (:line-width -1 :style released-button)))))
  '(region ((t (:background "blue" :foreground "white")))))
@@ -107,6 +151,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
+ '(c-basic-offset 4)
+ '(c-default-style "k&r")
  '(c-noise-macro-names '("constexpr"))
  '(c-syntactic-indentation t)
  '(c-syntactic-indentation-in-macros t)
@@ -117,15 +163,17 @@
  '(fill-column 100)
  '(global-auto-revert-mode t)
  '(global-font-lock-mode t)
+ '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
  '(message-log-max t)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
  '(package-selected-packages
-   '(rust-mode bison-mode persp-mode flycheck flymake yasnippet vlf yaml-mode use-package lsp-ui cmake-mode dap-mode lsp-mode smart-tab smart-tabs-mode))
+   '(tiny lsp-ui polymode treesit-auto rust-mode bison-mode flycheck flymake yasnippet vlf yaml-mode use-package cmake-mode dap-mode smart-tab smart-tabs-mode))
  '(scroll-step 1)
  '(show-paren-mode t)
+ '(tab-width 4)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
  '(visible-bell t)
@@ -133,31 +181,25 @@
  '(whitespace-style
    '(face trailing tabs spaces lines newline empty indentation space-before-tab space-mark tab-mark newline-mark)))
 
-;; This macro allows me to define a different indentation style based on path matching
-(defmacro define-new-c-style (name derived-from style-alist match-path)
-  `(progn
-     (c-add-style ,name
-		  '(,derived-from ,@style-alist))
-     (add-hook 'c-mode-hook
-	       (lambda ()
-		 (let ((filename (buffer-file-name)))
-		   (when (and filename
-			      (string-match (expand-file-name ,match-path) filename))
-		     (c-set-style ,name)))))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ; Stuff specific to C programming
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Very basic whitesmiths style for zeek
-(define-new-c-style "zeek" "whitesmith"
-  ((c-basic-offset . 4)
-   (c-offsets-alist . ((statement-case-open . +)
-		       (arglist-cont-nonempty . c-lineup-arglist)))
-   (tab-width . 4)
-   (indent-tabs-mode . t)) "*")
+(defun clang-format-save-hook-for-this-buffer ()
+  "Create a buffer local save hook."
+  (add-hook 'before-save-hook
+            (lambda ()
+              (when (locate-dominating-file "." ".clang-format")
+                (clang-format-buffer))
+              ;; Continue to save.
+              nil)
+            nil
+            ;; Buffer local hook.
+            t))
+;(add-hook 'c-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+(add-hook 'c++-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
 
 ;; I don't know why I need to do this, but c++-mode is forgetting that
 ;; it should be the mode for .h files
@@ -165,28 +207,27 @@
 
 ;; Force some keywords in C++ to be specific font faces
 (add-hook 'c++-mode-hook
-	  '(lambda()
-	     (font-lock-add-keywords
-	      nil '(;; PREPROCESSOR_CONSTANT
-		    ("\\<[A-Z]+[A-Z_]+\\>" . font-lock-constant-face)
-		    ;; hexadecimal numbers
-		    ("\\<0[xX][0-9A-Fa-f]+\\>" . font-lock-constant-face)
-		    ;; integer/float/scientific numbers
-		    ("\\<[\\-+]*[0-9]*\\.?[0-9]+\\([ulUL]+\\|[eE][\\-+]?[0-9]+\\)?\\>" . font-lock-constant-face)
-		    ;; user-types (customize!)
-		    ("\\<[A-Za-z_]+[A-Za-z_0-9]*_\\(t\\|type\\|ptr\\)\\>" . font-lock-type-face)
-		    ("\\<\\(xstring\\|xchar\\)\\>" . font-lock-type-face)
-		    ))
-	     (c-set-style "zeek")
-	     ) t)
+      #'(lambda()
+         (font-lock-add-keywords
+          nil '(;; PREPROCESSOR_CONSTANT
+            ("\\<[A-Z]+[A-Z_]+\\>" . font-lock-constant-face)
+            ;; hexadecimal numbers
+            ("\\<0[xX][0-9A-Fa-f]+\\>" . font-lock-constant-face)
+            ;; integer/float/scientific numbers
+            ("\\<[\\-+]*[0-9]*\\.?[0-9]+\\([ulUL]+\\|[eE][\\-+]?[0-9]+\\)?\\>" . font-lock-constant-face)
+            ;; user-types (customize!)
+            ("\\<[A-Za-z_]+[A-Za-z_0-9]*_\\(t\\|type\\|ptr\\)\\>" . font-lock-type-face)
+            ("\\<\\(xstring\\|xchar\\)\\>" . font-lock-type-face)
+            ))
+         ) t)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; This unfortunately has to load after everything else or it doesn't work.
-(use-package smart-tabs-mode
-	     :ensure t
-	     :config
-	     (smart-tabs-insinuate 'c 'c++))
+;(use-package smart-tabs-mode
+;	     :ensure t
+;	     :config
+;	     (smart-tabs-insinuate 'zeek))
 
 (defun define-intrusive (class-name)
   "Surround current word or region with given text."
@@ -214,41 +255,58 @@
   (interactive "sNamespace: ")
   (let (pos1 pos2 bds)
     (if (and transient-mark-mode mark-active)
-	(progn
-	  (goto-char (region-end))
-	  (insert "\n} // namespace " namespace)
-	  (goto-char (region-beginning))
-	  (insert "namespace " namespace " {\n\n"))
+    (progn
+      (goto-char (region-end))
+      (insert "\n} // namespace " namespace)
+      (goto-char (region-beginning))
+      (insert "namespace " namespace " {\n\n"))
       (progn
-	(setq bds (bounds-of-this-at-point 'symbol))
-	(goto-char (cdr bds))
-	(insert "\n} // namespace " namespace)
-	(goto-char (car bds))
-	(insert "namespace " namespace " {\n\n")))))
+    (setq bds (bounds-of-this-at-point 'symbol))
+    (goto-char (cdr bds))
+    (insert "\n} // namespace " namespace)
+    (goto-char (car bds))
+    (insert "namespace " namespace " {\n\n")))))
 
 (defun disable-deprecation ()
   "Disable deprecation warnings for a block"
   (interactive "")
   (let (pos1 pos2 bds)
     (if (and transient-mark-mode mark-active)
-	(progn
-	  (goto-char (region-end))
-	  (insert "#pragma GCC diagnostic pop\n")
-	  (goto-char (region-beginning))
-	  (insert "#pragma GCC diagnostic push")
-	  (insert "\n#pragma GCC diagnostic ignored \"-Wdeprecated-declarations\"\n")
+    (progn
+      (goto-char (region-end))
+      (insert "#pragma GCC diagnostic pop\n")
+      (goto-char (region-beginning))
+      (insert "#pragma GCC diagnostic push")
+      (insert "\n#pragma GCC diagnostic ignored \"-Wdeprecated-declarations\"\n")
       (progn
-	(setq bds (bounds-of-this-at-point 'symbol))
-	(goto-char (cdr bds))
-	(insert "#pragma GCC diagnostic pop\n")
-	(goto-char (car bds))
-	(insert "\n#pragma GCC diagnostic push")
-	(insert "\n#pragma GCC diagnostic ignored \"-Wdeprecated-declarations\""))))))
+    (setq bds (bounds-of-this-at-point 'symbol))
+    (goto-char (cdr bds))
+    (insert "#pragma GCC diagnostic pop\n")
+    (goto-char (car bds))
+    (insert "\n#pragma GCC diagnostic push")
+    (insert "\n#pragma GCC diagnostic ignored \"-Wdeprecated-declarations\""))))))
+
+(defun move-region ()
+  "Wrap a region with std::move()"
+  (interactive "")
+  (let (pos1 pos2 bds)
+    (if (and transient-mark-mode mark-active)
+    (progn
+      (goto-char (region-end))
+      (insert ")")
+      (goto-char (region-beginning))
+      (insert "std::move(")
+      (progn
+    (setq bds (bounds-of-this-at-point 'symbol))
+    (goto-char (cdr bds))
+    (insert ");")
+    (goto-char (car bds))
+    (insert "std::move("))))))
 
 (put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
 
 (setq frame-title-format
       '((:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
-(put 'upcase-region 'disabled nil)
