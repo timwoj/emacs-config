@@ -75,14 +75,8 @@
 ;; Zeek BIF mode, used by polymode for simple highlighting
 (use-package zeek-bif-mode)
 
-;; Setup using bison mode and flex mode
-(require 'flex)
-(add-to-list 'auto-mode-alist '("\\.l$" . flex-mode))
-(autoload 'flex-mode "flex")
-
-(require 'bison-mode)
-(add-to-list 'auto-mode-alist '("\\.y$" . bison-mode))
-(autoload 'bison-mode "bison-mode")
+;; Setup using bison mode for .y and .l files
+(use-package bison-mode)
 
 ;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
 (setq read-process-output-max (* 1024 1024))
