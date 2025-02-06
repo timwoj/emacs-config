@@ -154,7 +154,7 @@
  '(completion-ignored-extensions
    '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl" ".glo" ".idx" ".lot" ".tmp"))
  '(current-language-environment "English")
- '(fill-column 100)
+ '(fill-column 80)
  '(global-auto-revert-mode t)
  '(global-font-lock-mode t)
  '(indent-tabs-mode nil)
