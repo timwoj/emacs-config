@@ -40,6 +40,8 @@
 (tiny-setup-default)
 
 ;; Custom major modes for zeek development plus LSP support for zeek-language-server
+
+;; Zeek BIF mode, used by polymode for simple highlighting
 (use-package zeek-bif-mode)
 (use-package polymode
   :ensure t
@@ -56,6 +58,9 @@
                    :hostmode 'poly-bif-hostmode
                    :innermodes '(poly-cpp-bif-innermode)))
 
+;; Zeek script mode, plus LSP support for zeek-language-server. This requires
+;; installation of https://github.com/bbannier/zeek-language-server.
+(use-package zeek-mode)
 (add-hook 'zeek-mode-hook #'lsp)
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-language-id-configuration
@@ -71,9 +76,6 @@
 (use-package spicy-ts-mode)
 (add-to-list 'auto-mode-alist '("\\.spicy$" . spicy-ts-mode))
 (autoload 'spicy-ts-mode "spicy")
-
-;; Zeek BIF mode, used by polymode for simple highlighting
-(use-package zeek-bif-mode)
 
 ;; Setup using bison mode for .y and .l files
 (use-package bison-mode)
