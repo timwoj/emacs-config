@@ -165,6 +165,7 @@
  '(message-log-max t)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
+ ;; use package-install-selected-packages to install all of these automatically.
  '(package-selected-packages
    '(tiny lsp-ui polymode treesit-auto rust-mode bison-mode flycheck flymake yasnippet vlf yaml-mode use-package cmake-mode dap-mode smart-tab smart-tabs-mode))
  '(scroll-step 1)
@@ -172,6 +173,8 @@
  '(tab-width 4)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
+ ;; this lets emacs use a dot-file that's symlinked to a git repo without complaining
+ '(vc-follow-symlinks nil)
  '(visible-bell t)
  '(which-function-mode t)
  '(whitespace-style
