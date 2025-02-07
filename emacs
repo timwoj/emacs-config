@@ -1,6 +1,6 @@
 ;; Add custom .el path to load-path
 (add-to-list 'load-path "~/.emacs.d/custom")
-(add-to-list 'load-path "/opt/homebrew/Cellar/clang-format/19.1.4/share/clang")
+(add-to-list 'load-path "/opt/homebrew/Cellar/clang-format/19.1.7/share/clang")
 (add-to-list 'load-path "~/.local/bin")
 
 (require 'package)
@@ -14,7 +14,7 @@
 ;; Setup tree-sitter
 (eval-when-compile
   (require 'treesit))
-  
+
 ;; (use-package treesit-auto
 ;;   :config
 ;;   (global-treesit-auto-mode))
