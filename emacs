@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 ;; Add custom .el path to load-path
 (add-to-list 'load-path "~/.emacs.d/custom")
 (add-to-list 'load-path "/opt/homebrew/Cellar/clang-format/19.1.7/share/clang")
@@ -7,8 +9,6 @@
 (add-to-list 'package-archives
          '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
 (package-initialize)
 
 ;; Setup tree-sitter
