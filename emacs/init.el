@@ -104,7 +104,7 @@
 
 ;; Zeek BIF mode, used by polymode for simple highlighting
 (use-package zeek-bif-mode
-  :ensure t)
+  :ensure (:host github :repo "timwoj/zeek-bif-mode"))
 (use-package polymode
   :ensure t
   :mode("\.bif$" . poly-bif-mode)
