@@ -15,9 +15,11 @@
 (eval-when-compile
   (require 'treesit))
 
-;; (use-package treesit-auto
-;;   :config
-;;   (global-treesit-auto-mode))
+(use-package treesit-auto
+  :ensure t
+  :custom (treesit-auto-install t)
+  :config
+  (global-treesit-auto-mode))
 
 ;; Setup use-package
 (eval-when-compile
