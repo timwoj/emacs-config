@@ -7,11 +7,63 @@
 (add-to-list 'load-path "/opt/homebrew/Cellar/clang-format/19.1.7/share/clang")
 (add-to-list 'load-path "~/.local/bin")
 
-(require 'package)
-(add-to-list 'package-archives
-         '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(setq elpaca-lock-file (expand-file-name "elpaca-lockfile.eld" user-emacs-directory))
 
-(package-initialize)
+(defun my/elpaca-write-lock-file ()
+  "Write lock file into a fixed path using `elpaca-lock-file'."
+  (interactive)
+  (minibuffer-with-setup-hook #'(lambda ()
+                                  (insert elpaca-lock-file))
+    (call-interactively 'elpaca-write-lock-file)))
+
+;; Avoid to show a message about deprecation of cl package
+(setq byte-compile-warnings '(cl-functions))
+
+(defvar elpaca-installer-version 0.9)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1 :inherit ignore
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                  ,@(when-let* ((depth (plist-get order :depth)))
+                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                  ,(plist-get order :repo) ,repo))))
+                  ((zerop (call-process "git" nil buffer t "checkout"
+                                        (or (plist-get order :ref) "--"))))
+                  (emacs (concat invocation-directory invocation-name))
+                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                  ((require 'elpaca))
+                  ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+
+(add-hook 'after-init-hook #'elpaca-process-queues)
+
+(elpaca `(,@elpaca-order))
+
+;; Install use-package support
+(elpaca elpaca-use-package
+        ;; Enable use-package :ensure support for Elpaca.
+        (elpaca-use-package-mode))
 
 ;; Setup tree-sitter
 (eval-when-compile
@@ -27,8 +79,10 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package vlf)
-(use-package cmake-mode)
+(use-package vlf
+  :ensure t)
+(use-package cmake-mode
+  :ensure t)
 (use-package lsp-mode
   :ensure t
   :hook ((c-mode c++-mode) . lsp)
@@ -36,16 +90,21 @@
   (setq lsp-clients-clangd-args '("-j=4" "--background-index" "--log=error" "--compile-commands-dir=build"))
   :commands lsp)
 (use-package lsp-ui
+  :ensure t
   :commands lsp-ui-mode)
-(use-package clang-format)
+(use-package clang-format
+  :ensure t)
 
-(use-package tiny)
-(tiny-setup-default)
+(use-package tiny
+  :ensure t
+  :config
+  (tiny-setup-default))
 
 ;; Custom major modes for zeek development plus LSP support for zeek-language-server
 
 ;; Zeek BIF mode, used by polymode for simple highlighting
-(use-package zeek-bif-mode)
+(use-package zeek-bif-mode
+  :ensure t)
 (use-package polymode
   :ensure t
   :mode("\.bif$" . poly-bif-mode)
@@ -63,7 +122,9 @@
 
 ;; Zeek script mode, plus LSP support for zeek-language-server. This requires
 ;; installation of https://github.com/bbannier/zeek-language-server.
-(use-package zeek-mode)
+(use-package zeek-mode
+  :ensure (:host github :repo "zeek/emacs-zeek-mode"))
+;; TODO: this hook can probably be configured via use-package
 (add-hook 'zeek-mode-hook #'lsp)
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-language-id-configuration
@@ -76,12 +137,15 @@
                     :server-id 'zeek)))
 
 ;; Custom major mode for spicy development
-(use-package spicy-ts-mode)
-(add-to-list 'auto-mode-alist '("\\.spicy$" . spicy-ts-mode))
-(autoload 'spicy-ts-mode "spicy")
+(use-package spicy-ts-mode
+  :ensure (:host github :repo "timwoj/spicy-ts-mode")
+  :config
+  (add-to-list 'auto-mode-alist '("\\.spicy$" . spicy-ts-mode))
+  (autoload 'spicy-ts-mode "spicy"))
 
 ;; Setup using bison mode for .y and .l files
-(use-package bison-mode)
+(use-package bison-mode
+  :ensure t)
 
 ;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
 (setq read-process-output-max (* 1024 1024))
@@ -167,9 +231,6 @@
  '(message-log-max t)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
- ;; use package-install-selected-packages to install all of these automatically.
- '(package-selected-packages
-   '(flycheck-package package-lint tiny lsp-ui polymode treesit-auto rust-mode bison-mode flycheck flymake vlf yaml-mode use-package cmake-mode dap-mode smart-tab smart-tabs-mode))
  '(scroll-step 1)
  '(show-paren-mode t)
  '(tab-width 4)
