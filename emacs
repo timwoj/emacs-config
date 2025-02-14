@@ -33,7 +33,6 @@
   :commands lsp)
 (use-package lsp-ui
   :commands lsp-ui-mode)
-(use-package yasnippet)
 (use-package clang-format)
 
 (use-package tiny)
@@ -167,7 +166,7 @@
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
  ;; use package-install-selected-packages to install all of these automatically.
  '(package-selected-packages
-   '(tiny lsp-ui polymode treesit-auto rust-mode bison-mode flycheck flymake yasnippet vlf yaml-mode use-package cmake-mode dap-mode smart-tab smart-tabs-mode))
+   '(flycheck-package package-lint tiny lsp-ui polymode treesit-auto rust-mode bison-mode flycheck flymake vlf yaml-mode use-package cmake-mode dap-mode smart-tab smart-tabs-mode))
  '(scroll-step 1)
  '(show-paren-mode t)
  '(tab-width 4)
