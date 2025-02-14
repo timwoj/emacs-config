@@ -1,4 +1,6 @@
-;; -*- lexical-binding: t -*-
+;;; init.el --- init file -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 ;; Add custom .el path to load-path
 (add-to-list 'load-path "~/.emacs.d/custom")
@@ -230,28 +232,28 @@
 ;	     (smart-tabs-insinuate 'zeek))
 
 (defun define-intrusive (class-name)
-  "Surround current word or region with given text."
+  "Surround current word or region with given CLASS-NAME."
   (interactive "sClass name: ")
   (insert "using " class-name "Ptr = zeek::IntrusivePtr<" class-name ">;\n\n"))
 (global-set-key [f2] 'define-intrusive)
 
 (defun depr-using (name namespace)
-  "Deprecate a symbol with a using statement"
+  "Deprecate a symbol with a using statement, aliasing NAME into NAMESPACE."
   (interactive "sClass name: \nsNamespace: ")
   (insert "using " name " [[deprecated(\"Remove in v5.1. Use " namespace "::" name ".\")]] = " namespace "::" name ";\n"))
 
 (defun depr-constexpr (name namespace)
-  "Deprecate a symbol with a constexpr statement"
+  "Deprecate a symbol with a constexpr statement, aliasing NAME into NAMESPACE."
   (interactive "sName: \nsNamespace: ")
   (insert "constexpr auto " name " [[deprecated(\"Remove in v5.1. Use " namespace "::" name ".\")]] = " namespace "::" name ";\n"))
 
 (defun depr-var (type name namespace)
-  "Deprecate an extern variable"
+  "Deprecate an extern variable, aliasing NAME of TYPE into NAMESPACE."
   (interactive "sType: \nsName: \nsNamespace: ")
   (insert "extern " type "& " name " [[deprecated(\"Remove in v5.1. Use " namespace "::" name ".\")]];"))
 
 (defun ns-region (namespace)
-  "Wrap a region with a namespace declaration"
+  "Wrap a region with a namespace declaration with a name of NAMESPACE."
   (interactive "sNamespace: ")
   (let (pos1 pos2 bds)
     (if (and transient-mark-mode mark-active)
@@ -268,7 +270,7 @@
     (insert "namespace " namespace " {\n\n")))))
 
 (defun disable-deprecation ()
-  "Disable deprecation warnings for a block"
+  "Disable deprecation warnings for a block."
   (interactive "")
   (let (pos1 pos2 bds)
     (if (and transient-mark-mode mark-active)
@@ -287,7 +289,7 @@
     (insert "\n#pragma GCC diagnostic ignored \"-Wdeprecated-declarations\""))))))
 
 (defun move-region ()
-  "Wrap a region with std::move()"
+  "Wrap a region with std::move()."
   (interactive "")
   (let (pos1 pos2 bds)
     (if (and transient-mark-mode mark-active)
@@ -312,8 +314,13 @@
                  "%b"))))
 
 (defun my/highlight-todo-like-words ()
+  "Highlight FIXME and TODO with a different font-face."
   (font-lock-add-keywords
    nil `(("\\<\\(FIXME\\|TODO\\)"
           1 font-lock-warning-face t))))
 
 (add-hook 'prog-mode-hook 'my/highlight-todo-like-words)
+
+(provide 'init)
+
+;;; init.el ends here
