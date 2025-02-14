@@ -196,8 +196,10 @@
             nil
             ;; Buffer local hook.
             t))
+
 ;(add-hook 'c-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
 (add-hook 'c++-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+(add-hook 'before-save-hook 'zeek-format-before-save)
 
 ;; I don't know why I need to do this, but c++-mode is forgetting that
 ;; it should be the mode for .h files
