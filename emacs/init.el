@@ -162,7 +162,6 @@
  '(global-font-lock-mode t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
- '(menu-bar-mode nil)
  '(message-log-max t)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
@@ -172,7 +171,6 @@
  '(scroll-step 1)
  '(show-paren-mode t)
  '(tab-width 4)
- '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
  ;; this lets emacs use a dot-file that's symlinked to a git repo without complaining
  '(vc-follow-symlinks nil)
