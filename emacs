@@ -310,3 +310,10 @@
       '((:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
+
+(defun my/highlight-todo-like-words ()
+  (font-lock-add-keywords
+   nil `(("\\<\\(FIXME\\|TODO\\)"
+          1 font-lock-warning-face t))))
+
+(add-hook 'prog-mode-hook 'my/highlight-todo-like-words)
