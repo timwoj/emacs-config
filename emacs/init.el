@@ -238,7 +238,6 @@
  ;; this lets emacs use a dot-file that's symlinked to a git repo without complaining
  '(vc-follow-symlinks nil)
  '(visible-bell t)
- '(which-function-mode t)
  '(whitespace-style
    '(face trailing tabs spaces lines newline empty indentation space-before-tab space-mark tab-mark newline-mark)))
 
@@ -381,6 +380,7 @@
           1 font-lock-warning-face t))))
 
 (add-hook 'prog-mode-hook 'my/highlight-todo-like-words)
+(add-hook 'prog-mode-hook #'which-function-mode)
 
 (provide 'init)
 
