@@ -147,6 +147,12 @@
 (use-package bison-mode
   :ensure t)
 
+;; Prefer flycheck over flymake.
+(use-package flycheck
+  :ensure t
+  :hook
+  (after-init-hook . #'global-flycheck-mode))
+
 ;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 1600000)
