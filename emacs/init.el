@@ -213,10 +213,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(blink-cursor-mode nil)
  '(c-basic-offset 4)
  '(c-default-style "k&r")
- '(c-noise-macro-names '("constexpr"))
  '(c-syntactic-indentation t)
  '(c-syntactic-indentation-in-macros t)
  '(case-fold-search t)
@@ -224,19 +222,19 @@
    '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl" ".glo" ".idx" ".lot" ".tmp"))
  '(current-language-environment "English")
  '(fill-column 80)
- '(global-auto-revert-mode t)
- '(global-font-lock-mode t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(message-log-max t)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
  '(scroll-step 1)
- '(show-paren-mode t)
  '(tab-width 4)
+ ;; If multiple windows are open, this prevents emacs from truncating when the window
+ ;; isn't wide enough.
  '(truncate-partial-width-windows nil)
  ;; this lets emacs use a dot-file that's symlinked to a git repo without complaining
  '(vc-follow-symlinks nil)
+ ;; Make the emacs window flash on errors instead of an actual audio queue
  '(visible-bell t)
  '(whitespace-style
    '(face trailing tabs spaces lines newline empty indentation space-before-tab space-mark tab-mark newline-mark)))
