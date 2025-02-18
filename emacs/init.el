@@ -272,6 +272,8 @@
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
 
 ;; Force some keywords in C++ to be specific font faces
+;; TODO: this might not be necessary anymore. c++-ts-mode might highlight all
+;; of these correctly.
 (add-hook 'c++-ts-mode-hook
       #'(lambda()
          (font-lock-add-keywords
@@ -283,7 +285,6 @@
             ("\\<[\\-+]*[0-9]*\\.?[0-9]+\\([ulUL]+\\|[eE][\\-+]?[0-9]+\\)?\\>" . font-lock-constant-face)
             ;; user-types (customize!)
             ("\\<[A-Za-z_]+[A-Za-z_0-9]*_\\(t\\|type\\|ptr\\)\\>" . font-lock-type-face)
-            ("\\<\\(xstring\\|xchar\\)\\>" . font-lock-type-face)
             ))
          ) t)
 
