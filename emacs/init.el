@@ -85,7 +85,7 @@
   :ensure t)
 (use-package lsp-mode
   :ensure t
-  :hook ((c-mode c++-mode) . lsp)
+  :hook ((c-mode c++-mode c-ts-mode c++-ts-mode) . lsp)
   :config
   (setq lsp-clients-clangd-args '("-j=4" "--background-index" "--log=error" "--compile-commands-dir=build"))
   :commands lsp)
@@ -111,7 +111,7 @@
   :config
   (define-hostmode poly-bif-hostmode :mode 'zeek-bif-mode)
   (define-innermode poly-cpp-bif-innermode
-                    :mode 'c++-mode
+                    :mode 'c++-ts-mode
                     :head-matcher "^.*%\{"
                     :tail-matcher "^.*%\}"
                     :head-mode 'host
@@ -257,16 +257,16 @@
             ;; Buffer local hook.
             t))
 
-;(add-hook 'c-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
-(add-hook 'c++-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
+(add-hook 'c-ts-mode-hook 'clang-format-save-hook-for-this-buffer)
+(add-hook 'c++-ts-mode-hook 'clang-format-save-hook-for-this-buffer)
 (add-hook 'before-save-hook 'zeek-format-before-save)
 
-;; I don't know why I need to do this, but c++-mode is forgetting that
+;; I don't know why I need to do this, but c++-ts-mode is forgetting that
 ;; it should be the mode for .h files
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
 
 ;; Force some keywords in C++ to be specific font faces
-(add-hook 'c++-mode-hook
+(add-hook 'c++-ts-mode-hook
       #'(lambda()
          (font-lock-add-keywords
           nil '(;; PREPROCESSOR_CONSTANT
