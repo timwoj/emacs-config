@@ -291,12 +291,6 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; This unfortunately has to load after everything else or it doesn't work.
-;(use-package smart-tabs-mode
-;	     :ensure t
-;	     :config
-;	     (smart-tabs-insinuate 'zeek))
-
 (defun define-intrusive (class-name)
   "Surround current word or region with given CLASS-NAME."
   (interactive "sClass name: ")
