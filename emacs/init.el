@@ -228,7 +228,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(case-fold-search t)
  '(completion-ignored-extensions
    '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl" ".glo" ".idx" ".lot" ".tmp"))
  '(current-language-environment "English")
@@ -271,10 +270,7 @@
 (add-hook 'c-ts-mode-hook 'clang-format-save-hook-for-this-buffer)
 (add-hook 'c++-ts-mode-hook 'clang-format-save-hook-for-this-buffer)
 (add-hook 'before-save-hook 'zeek-format-before-save)
-
-;; I don't know why I need to do this, but c++-ts-mode is forgetting that
-;; it should be the mode for .h files
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-ts-mode))
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Force some keywords in C++ to be specific font faces
 ;; TODO: this might not be necessary anymore. c++-ts-mode might highlight all
@@ -291,9 +287,7 @@
             ;; user-types (customize!)
             ("\\<[A-Za-z_]+[A-Za-z_0-9]*_\\(t\\|type\\|ptr\\)\\>" . font-lock-type-face)
             ))
-         ) t)
-
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+         ))
 
 (defun define-intrusive (class-name)
   "Surround current word or region with given CLASS-NAME."
