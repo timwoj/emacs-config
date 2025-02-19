@@ -97,6 +97,10 @@
 (use-package clang-format
   :ensure t)
 
+;; yasnippet is required to make lsp-mode work correctly.
+(use-package yasnippet
+  :ensure t)
+
 (use-package tiny
   :ensure t
   :config
