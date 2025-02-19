@@ -2,11 +2,13 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Add custom .el path to load-path
 (add-to-list 'load-path "~/.emacs.d/custom")
 (add-to-list 'load-path "/opt/homebrew/Cellar/clang-format/19.1.7/share/clang")
 (add-to-list 'load-path "~/.local/bin")
 
+;; This is a bunch of setup that needs to happen for elpaca
+;; to work. I tried moving this to another file and loading
+;; it with load-file, but it made startup really slow.
 (setq elpaca-lock-file (expand-file-name "elpaca-lockfile.eld" user-emacs-directory))
 
 (defun my/elpaca-write-lock-file ()
@@ -207,7 +209,6 @@
 ; fix the Delete key so it does what it's supposed to
 (global-set-key [del] 'delete-char)
 
-; another comment region
 (global-set-key (kbd "C-c c") 'comment-region)
 (global-set-key (kbd "C-c u") 'uncomment-region)
 
