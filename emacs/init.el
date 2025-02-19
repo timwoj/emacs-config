@@ -181,16 +181,8 @@
 ; set text mode as the default major mode
 (setq default-major-mode 'text-mode)
 
-; disable a couple of minor modes that I don't care about
-(setq-default abbrev-mode nil)
-(setq-default eldoc-mode nil)
-
 ;; set shell mode variables
 (setq shell-prompt-pattern "[A-Za-z]* \[[0-9]*\]% ")
-
-;; Hide any "special" buffers by default
-(require 'ibuf-ext)
-(add-to-list 'ibuffer-never-show-predicates "^\\*")
 
 ;; Keybinds
 (global-set-key [prior]   'scroll-down) ; Page Up
