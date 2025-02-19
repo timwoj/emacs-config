@@ -153,6 +153,19 @@
   :hook
   (after-init-hook . #'global-flycheck-mode))
 
+;; Set some default options for c-ts-mode. This also the basis for
+;; some other modes like c++-ts-mode so they carry over.
+(use-package c-ts-mode
+  :ensure nil
+  :hook
+  (c-ts-mode-hook . 'turn-on-auto-fill)
+  (c-ts-mode-hook . (lambda ()
+                      (setq-local c-ts-basic-offset 4)
+                      (setq-local c-ts-mode-indent-style "k&r")
+                      (setq-local c-ts-mode-indent-offset 4)
+                      (setq-local c-syntactic-indentation t)
+                      (setq-local c-syntactic-indentation-in-macros t))))
+
 ;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 1600000)
@@ -162,7 +175,6 @@
 
 ; turn off auto-fill-mode which causes auto line wrapping, but turn it on for c-mode
 (auto-fill-mode 0)
-(setq c-mode-hook 'turn-on-auto-fill)
 
 ; set text mode as the default major mode
 (setq default-major-mode 'text-mode)
@@ -219,10 +231,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(c-basic-offset 4)
- '(c-default-style "k&r")
- '(c-syntactic-indentation t)
- '(c-syntactic-indentation-in-macros t)
  '(case-fold-search t)
  '(completion-ignored-extensions
    '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl" ".glo" ".idx" ".lot" ".tmp"))
