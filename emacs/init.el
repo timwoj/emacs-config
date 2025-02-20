@@ -151,17 +151,18 @@
   (after-init-hook . #'global-flycheck-mode))
 
 ;; Set some default options for c-ts-mode. This also the basis for
-;; some other modes like c++-ts-mode so they carry over.
+;; some other modes like c++-ts-mode so they carry over. It's set to
+;; :ensure nil only because it's a built-in package.
 (use-package c-ts-mode
   :ensure nil
   :hook
-  (c-ts-mode-hook . 'turn-on-auto-fill)
-  (c-ts-mode-hook . (lambda ()
-                      (setq-local c-ts-basic-offset 4)
-                      (setq-local c-ts-mode-indent-style "k&r")
-                      (setq-local c-ts-mode-indent-offset 4)
-                      (setq-local c-syntactic-indentation t)
-                      (setq-local c-syntactic-indentation-in-macros t))))
+  (c-ts-mode . 'turn-on-auto-fill)
+  :init
+  (setq c-ts-basic-offset 4)
+  (setq c-ts-mode-indent-style 'k&r)
+  (setq c-ts-mode-indent-offset 4)
+  (setq c-ts-syntactic-indentation t)
+  (setq c-ts-syntactic-indentation-in-macros t))
 
 ;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
 (setq read-process-output-max (* 1024 1024))
