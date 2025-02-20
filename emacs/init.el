@@ -64,45 +64,42 @@
 
 ;; Install use-package support
 (elpaca elpaca-use-package
-        ;; Enable use-package :ensure support for Elpaca.
-        (elpaca-use-package-mode))
+  ;; Enable use-package :ensure support for Elpaca.
+  (elpaca-use-package-mode))
+
+;; Avoid needing to use ":ensure t" in every use-package invocation
+(setq use-package-always-ensure t)
 
 ;; Setup tree-sitter
 (eval-when-compile
   (require 'treesit))
 
 (use-package treesit-auto
-  :ensure t
   :custom (treesit-auto-install t)
   :config
   (global-treesit-auto-mode))
 
-;; Setup use-package
-(eval-when-compile
-  (require 'use-package))
+;; vlf allows opening very-large files incrementally without bogging down Emacs
+(use-package vlf)
+(use-package cmake-mode)
+(use-package clang-format)
 
-(use-package vlf
-  :ensure t)
-(use-package cmake-mode
-  :ensure t)
+;; yasnippet is required to make lsp-mode work correctly.
+(use-package yasnippet)
+
+;; Setup using bison mode for .y and .l files
+(use-package bison-mode)
+
 (use-package lsp-mode
-  :ensure t
   :hook ((c-mode c++-mode c-ts-mode c++-ts-mode) . lsp)
   :config
   (setq lsp-clients-clangd-args '("-j=4" "--background-index" "--log=error" "--compile-commands-dir=build"))
   :commands lsp)
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
-(use-package clang-format
-  :ensure t)
 
-;; yasnippet is required to make lsp-mode work correctly.
-(use-package yasnippet
-  :ensure t)
+(use-package lsp-ui
+  :commands lsp-ui-mode)
 
 (use-package tiny
-  :ensure t
   :config
   (tiny-setup-default))
 
@@ -149,13 +146,8 @@
   (add-to-list 'auto-mode-alist '("\\.spicy$" . spicy-ts-mode))
   (autoload 'spicy-ts-mode "spicy"))
 
-;; Setup using bison mode for .y and .l files
-(use-package bison-mode
-  :ensure t)
-
 ;; Prefer flycheck over flymake.
 (use-package flycheck
-  :ensure t
   :hook
   (after-init-hook . #'global-flycheck-mode))
 
