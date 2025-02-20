@@ -91,7 +91,7 @@
 (use-package bison-mode)
 
 (use-package lsp-mode
-  :hook ((c-mode c++-mode c-ts-mode c++-ts-mode) . lsp)
+  :hook ((c-mode c++-mode c-ts-mode c++-ts-mode zeek-mode) . lsp)
   :config
   (setq lsp-clients-clangd-args '("-j=4" "--background-index" "--log=error" "--compile-commands-dir=build"))
   :commands lsp)
@@ -127,8 +127,7 @@
 ;; installation of https://github.com/bbannier/zeek-language-server.
 (use-package zeek-mode
   :ensure (:host github :repo "zeek/emacs-zeek-mode"))
-;; TODO: this hook can probably be configured via use-package
-(add-hook 'zeek-mode-hook #'lsp)
+
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-language-id-configuration
            '(zeek-mode . "zeek"))
