@@ -224,11 +224,15 @@
    '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl" ".glo" ".idx" ".lot" ".tmp"))
  '(current-language-environment "English")
  '(fill-column 80)
+ ;; Don't insert a mixture of tabs and spaces when indenting
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
+ ;; Allow the *messages* log to grow unbounded.
  '(message-log-max t)
  '(mouse-wheel-progressive-speed nil)
+ ;; Make the mouse wheel scroll a larger amount when the ctrl key is pressed.
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
+ ;; Only scroll one line at a time when the cursor moves out of the buffer window.
  '(scroll-step 1)
  '(tab-width 4)
  ;; If multiple windows are open, this prevents emacs from truncating when the window
