@@ -164,6 +164,13 @@
   (setq c-ts-syntactic-indentation t)
   (setq c-ts-syntactic-indentation-in-macros t))
 
+;; c++-ts-mode doesn't think it should handle header files and so
+;; c++-mode picks them up and breaks stuff.
+(use-package c-ts-mode
+  :ensure nil
+  :config
+  (add-to-list 'auto-mode-alist '("\\.h$" . c++-ts-mode)))
+
 ;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 1600000)
