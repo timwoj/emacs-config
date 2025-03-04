@@ -14,9 +14,6 @@
 ;; Disable package.el in favor of elpaca.el.
 (setq package-enable-at-startup nil)
 
-;; Needed in order to use emacs-lsp-booster.
-;;(setenv "LSP_USE_PLISTS" "true")
-
 ;; Allow emacs to automatically revert if a file changes on disk instead of asking.
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Revert.html
 (global-auto-revert-mode t)
