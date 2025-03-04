@@ -106,22 +106,22 @@
 ;; Custom major modes for zeek development plus LSP support for zeek-language-server
 
 ;; Zeek BIF mode, used by polymode for simple highlighting
-(use-package zeek-bif-mode
-  :ensure (:host github :repo "timwoj/zeek-bif-mode"))
-(use-package polymode
-  :ensure t
-  :mode("\.bif$" . poly-bif-mode)
-  :config
-  (define-hostmode poly-bif-hostmode :mode 'zeek-bif-mode)
-  (define-innermode poly-cpp-bif-innermode
-                    :mode 'c++-ts-mode
-                    :head-matcher "^.*%\{"
-                    :tail-matcher "^.*%\}"
-                    :head-mode 'host
-                    :tail-mode 'host)
-  (define-polymode poly-bif-mode
-                   :hostmode 'poly-bif-hostmode
-                   :innermodes '(poly-cpp-bif-innermode)))
+;; TODO: Disabled for now because it's very busted.
+;; (use-package zeek-bif-mode
+;;   :ensure (:host github :repo "timwoj/zeek-bif-mode"))
+;; (use-package polymode
+;;   :mode("\.bif$" . poly-bif-mode)
+;;   :config
+;;   (define-hostmode poly-bif-hostmode :mode 'zeek-bif-mode)
+;;   (define-innermode poly-cpp-bif-innermode
+;;                     :mode 'c++-ts-mode
+;;                     :head-matcher "^.*%\{"
+;;                     :tail-matcher "^.*%\}"
+;;                     :head-mode 'host
+;;                     :tail-mode 'host)
+;;   (define-polymode poly-bif-mode
+;;                    :hostmode 'poly-bif-hostmode
+;;                    :innermodes '(poly-cpp-bif-innermode)))
 
 ;; Zeek script mode, plus LSP support for zeek-language-server. This requires
 ;; installation of https://github.com/bbannier/zeek-language-server.
