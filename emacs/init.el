@@ -199,6 +199,7 @@
 (global-set-key [f6]      'start-kbd-macro)
 (global-set-key [f7]      'end-kbd-macro)
 (global-set-key [f8]      'call-last-kbd-macro)
+(global-set-key [f11]     'smerge-keep-current)
 (global-set-key [f12]     'whitespace-cleanup)
 
 ; fix the Delete key so it does what it's supposed to
@@ -230,7 +231,7 @@
  '(completion-ignored-extensions
    '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl" ".glo" ".idx" ".lot" ".tmp"))
  '(current-language-environment "English")
- '(fill-column 80)
+ '(fill-column 90)
  ;; Don't insert a mixture of tabs and spaces when indenting
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
