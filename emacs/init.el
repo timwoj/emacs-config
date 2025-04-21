@@ -3,8 +3,10 @@
 ;;; Code:
 
 (add-to-list 'load-path "~/.emacs.d/custom")
-(add-to-list 'load-path "/opt/homebrew/Cellar/clang-format/19.1.7/share/clang")
 (add-to-list 'load-path "~/.local/bin")
+
+(when (eq system-type 'darwin)
+  (add-to-list 'load-path "/opt/homebrew/share/clang"))
 
 ;; This is a bunch of setup that needs to happen for elpaca
 ;; to work. I tried moving this to another file and loading
