@@ -180,6 +180,10 @@
   (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-ts-mode)))
 
+(use-package treesit-fold
+  :ensure (:host github :repo "emacs-tree-sitter/treesit-fold")
+  :hook (yaml-ts-mode . treesit-fold-indicators-mode))
+
 ;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 1600000)
