@@ -143,8 +143,8 @@
 ;; Custom major mode for spicy development
 (use-package spicy-ts-mode
   :ensure (:host github :repo "timwoj/spicy-ts-mode")
+  :mode "\\.spicy$"
   :config
-  (add-to-list 'auto-mode-alist '("\\.spicy$" . spicy-ts-mode))
   (autoload 'spicy-ts-mode "spicy"))
 
 ;; Prefer flycheck over flymake.
@@ -168,17 +168,15 @@
 
 ;; c++-ts-mode doesn't think it should handle header files and so
 ;; c++-mode picks them up and breaks stuff.
-(use-package c-ts-mode
+(use-package c++-ts-mode
   :ensure nil
-  :config
-  (add-to-list 'auto-mode-alist '("\\.h$" . c++-ts-mode)))
+  :mode "\\.h$")
 
 ;; Map yml/yaml to yaml-ts-mode
 (use-package yaml-ts-mode
   :ensure nil
-  :config
-  (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-ts-mode)))
+  :mode "\\.yaml$"
+  :mode "\\.yml$")
 
 (use-package treesit-fold
   :ensure (:host github :repo "emacs-tree-sitter/treesit-fold")
