@@ -397,6 +397,13 @@
 (add-hook 'prog-mode-hook 'my/highlight-todo-like-words)
 (add-hook 'prog-mode-hook #'which-function-mode)
 
+;; Set the default window size. The numbers are the size in characters using
+;; the theme's font.
+(setq initial-frame-alist
+      (append initial-frame-alist
+              '((width  . 110)
+                (height . 70))))
+
 (provide 'init)
 
 ;;; init.el ends here
