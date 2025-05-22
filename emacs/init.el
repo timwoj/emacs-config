@@ -284,7 +284,7 @@
 
 (add-hook 'c-ts-mode-hook 'clang-format-save-hook-for-this-buffer)
 (add-hook 'c++-ts-mode-hook 'clang-format-save-hook-for-this-buffer)
-(add-hook 'before-save-hook 'zeek-format-before-save)
+;;(add-hook 'before-save-hook 'zeek-format-before-save)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Force some keywords in C++ to be specific font faces
