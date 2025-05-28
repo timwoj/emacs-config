@@ -94,8 +94,8 @@
 
 (use-package lsp-mode
   :hook ((c-mode c++-mode c-ts-mode c++-ts-mode zeek-mode) . lsp)
-  :config
-  (setq lsp-clients-clangd-args '("-j=4" "--background-index" "--log=error" "--compile-commands-dir=build"))
+  :custom
+  (lsp-clients-clangd-args '("-j=4" "--background-index" "--log=error" "--compile-commands-dir=build"))
   :commands lsp)
 
 (use-package lsp-ui
@@ -159,12 +159,12 @@
   :ensure nil
   :hook
   (c-ts-mode . 'turn-on-auto-fill)
-  :init
-  (setq c-ts-basic-offset 4)
-  (setq c-ts-mode-indent-style 'k&r)
-  (setq c-ts-mode-indent-offset 4)
-  (setq c-ts-syntactic-indentation t)
-  (setq c-ts-syntactic-indentation-in-macros t))
+  :custom
+  (c-ts-basic_offset 4)
+  (c-ts-mode-indent-style 'k&r)
+  (c-ts-mode-indent-offset 4)
+  (c-ts-syntactic-indentation t)
+  (c-ts-syntactic-indentation-in-macros t))
 
 ;; c++-ts-mode doesn't think it should handle header files and so
 ;; c++-mode picks them up and breaks stuff.
