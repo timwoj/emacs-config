@@ -182,6 +182,11 @@
   :ensure (:host github :repo "emacs-tree-sitter/treesit-fold")
   :hook (yaml-ts-mode . treesit-fold-indicators-mode))
 
+;; Load cmake-ts-mode just to set the indent offset to something bigger
+(use-package cmake-ts-mode
+  :ensure nil
+  :custom (cmake-ts-mode-indent-offset 4))
+
 ;; A few options to make lsp-mode faster (1 MB instead of the 4k default)
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 1600000)
