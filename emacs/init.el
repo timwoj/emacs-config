@@ -93,7 +93,7 @@
 (use-package bison-mode)
 
 (use-package lsp-mode
-  :hook ((c-mode c++-mode c-ts-mode c++-ts-mode zeek-mode) . lsp)
+  :hook ((c-ts-mode c-ts-mode c++-ts-mode zeek-mode bison-mode) . lsp)
   :custom
   (lsp-clients-clangd-args '("-j=4" "--background-index" "--log=error" "--compile-commands-dir=build"))
   :commands lsp)
@@ -104,6 +104,12 @@
 (use-package tiny
   :config
   (tiny-setup-default))
+
+;; Add all of the entries from PATH to the path that emacs can search for executables
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 ;; Custom major modes for zeek development plus LSP support for zeek-language-server
 
@@ -132,13 +138,24 @@
 
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-language-id-configuration
-           '(zeek-mode . "zeek"))
+               '(zeek-mode . "zeek"))
 
   (lsp-register-client
-;;   (make-lsp-client :new-connection (lsp-stdio-connection '("zeek-language-server" "-f" "debug"))
+   ;;   (make-lsp-client :new-connection (lsp-stdio-connection '("zeek-language-server" "-f" "debug"))
    (make-lsp-client :new-connection (lsp-stdio-connection '("zeek-language-server"))
                     :activation-fn (lsp-activate-on "zeek")
                     :server-id 'zeek)))
+
+;; Requires https://github.com/Ethsan/yals/ be installed somewhere in the PATH, probably
+;; via 'npm link'.
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-language-id-configuration
+               '(bison-mode . "bison"))
+
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("node" "/opt/homebrew/bin/yals" "--stdio"))
+                    :activation-fn (lsp-activate-on "bison")
+                    :server-id 'bison)))
 
 ;; Custom major mode for spicy development
 (use-package spicy-ts-mode
