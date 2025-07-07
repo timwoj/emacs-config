@@ -262,29 +262,26 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(completion-ignored-extensions
-   '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl" ".glo" ".idx" ".lot" ".tmp"))
+   '(".o" ".elc" "~" ".bin" ".lbin" ".fasl" ".dvi" ".toc" ".log" ".aux" ".lof" ".blg" ".bbl"
+     ".glo" ".idx" ".lot" ".tmp"))
  '(current-language-environment "English")
  '(fill-column 90)
- ;; Don't insert a mixture of tabs and spaces when indenting
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
- ;; Allow the *messages* log to grow unbounded.
  '(message-log-max t)
  '(mouse-wheel-progressive-speed nil)
- ;; Make the mouse wheel scroll a larger amount when the ctrl key is pressed.
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
- ;; Only scroll one line at a time when the cursor moves out of the buffer window.
+ '(package-selected-packages
+   '(bison-mode cmake-mode exec-path-from-shell flycheck-package lsp-ui polymode rust-mode
+                tiny treesit-auto vlf yaml-mode yasnippet))
  '(scroll-step 1)
  '(tab-width 4)
- ;; If multiple windows are open, this prevents emacs from truncating when the window
- ;; isn't wide enough.
  '(truncate-partial-width-windows nil)
- ;; this lets emacs use a dot-file that's symlinked to a git repo without complaining
  '(vc-follow-symlinks nil)
- ;; Make the emacs window flash on errors instead of an actual audio queue
  '(visible-bell t)
  '(whitespace-style
-   '(face trailing tabs spaces lines newline empty indentation space-before-tab space-mark tab-mark newline-mark)))
+   '(face trailing tabs spaces lines newline empty indentation space-before-tab space-mark
+          tab-mark newline-mark)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
