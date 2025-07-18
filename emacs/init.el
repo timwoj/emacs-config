@@ -195,6 +195,11 @@
   :mode "\\.yaml$"
   :mode "\\.yml$")
 
+;; Map dockerfile-ts-mode to anything starting with 'Dockerfile.' also
+(use-package dockerfile-ts-mode
+  :ensure nil
+  :mode "Dockerfile\\.*")
+
 (use-package treesit-fold
   :ensure (:host github :repo "emacs-tree-sitter/treesit-fold")
   :hook (yaml-ts-mode . treesit-fold-indicators-mode))
