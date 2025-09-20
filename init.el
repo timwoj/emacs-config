@@ -8,6 +8,12 @@
 (when (eq system-type 'darwin)
   (add-to-list 'load-path "/opt/homebrew/share/clang"))
 
+;; Arch technically builds development versions of emacs, so elpaca doesn't
+;; automatically set elpaca-core-date. Set it to the build date of the emacs
+;; package.
+(when (string= (system-name) "filegeek")
+  (setq elpaca-core-date '(20250814)))
+
 ;; This is a bunch of setup that needs to happen for elpaca
 ;; to work. I tried moving this to another file and loading
 ;; it with load-file, but it made startup really slow.

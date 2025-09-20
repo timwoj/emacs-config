@@ -4,9 +4,13 @@
 
 ;;; Code:
 
-;; Disable the menubar and toolbar all the time.
+;; Disable the menubar all the time.
 (menu-bar-mode -1)
-(tool-bar-mode -1)
+
+;; Disable the toolbar all the time. tool-bar-mode doesn't exist on my
+;; Arch install, so check for that to avoid an error at startup.
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
 
 ;; Stop the cursor from blinking.
 (blink-cursor-mode -1)
