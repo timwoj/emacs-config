@@ -92,6 +92,11 @@
 (use-package cmake-mode)
 (use-package clang-format)
 
+;; bazel-mode is weird because the package is named bazel but the mode function
+;; is bazel-mode. this is used for starlark files.
+(use-package bazel
+  :mode ("\\.star$" . bazel-mode))
+
 ;; yasnippet is required to make lsp-mode work correctly.
 (use-package yasnippet)
 
