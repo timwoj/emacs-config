@@ -1,0 +1,5 @@
+# skip DS Store for MacOS
+**/.DS_Store
+
+# Emacs temporary files
+*~
