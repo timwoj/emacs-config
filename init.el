@@ -101,7 +101,9 @@
 (use-package yasnippet)
 
 ;; Setup using bison mode for .y and .l files
-(use-package bison-mode)
+(use-package bison-mode
+  :mode "\\.y$"
+  :mode "\\.l$")
 
 (use-package lsp-mode
   :hook ((c-ts-mode c-ts-mode c++-ts-mode zeek-mode bison-mode) . lsp)
