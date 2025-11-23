@@ -166,7 +166,7 @@
                '(bison-mode . "bison"))
 
   (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("/opt/homebrew/bin/yals"))
+   (make-lsp-client :new-connection (lsp-stdio-connection '("yals"))
                     :activation-fn (lsp-activate-on "bison")
                     :server-id 'bison)))
 
