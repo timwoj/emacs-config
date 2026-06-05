@@ -290,8 +290,8 @@
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
  '(package-selected-packages
-   '(bison-mode cmake-mode exec-path-from-shell flycheck-package lsp-ui polymode rust-mode
-                tiny treesit-auto vlf yaml-mode yasnippet))
+   '(bison-mode bnf-mode cmake-mode exec-path-from-shell flycheck-package lsp-ui polymode
+                rust-mode tiny treesit-auto vlf yaml-mode yasnippet))
  '(scroll-step 1)
  '(tab-width 4)
  '(truncate-partial-width-windows nil)
