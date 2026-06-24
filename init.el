@@ -187,14 +187,17 @@
 ;; :ensure nil only because it's a built-in package.
 (use-package c-ts-mode
   :ensure nil
-  :hook
-  (c-ts-mode . 'turn-on-auto-fill)
   :custom
   (c-ts-basic_offset 4)
   (c-ts-mode-indent-style 'k&r)
   (c-ts-mode-indent-offset 4)
   (c-ts-syntactic-indentation t)
   (c-ts-syntactic-indentation-in-macros t))
+
+;; This has to happen here instead of in the c-ts-mode use-package
+;; definition as a :hook because otherwise it ends up in a loop
+;; with prog-mode with initializing.
+(add-hook 'c-ts-mode-hook 'turn-on-auto-fill)
 
 ;; c++-ts-mode doesn't think it should handle header files and so
 ;; c++-mode picks them up and breaks stuff.
