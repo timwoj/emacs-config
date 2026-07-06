@@ -107,6 +107,10 @@
   :mode "\\.l$"
   :mode "\\.ll$")
 
+(use-package php-ts-mode
+  :ensure nil
+  :mode "\\.php$")
+
 (use-package lsp-mode
   :hook ((c-ts-mode c-ts-mode c++-ts-mode zeek-mode bison-mode) . lsp)
   :custom
